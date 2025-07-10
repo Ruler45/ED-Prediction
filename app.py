@@ -4,10 +4,19 @@ import pickle
 import numpy as np
 import pandas as pd
 # from sklearn.preprocessing import StandardScaler
-
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Allow frontend origin
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or ["*"] for all
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Define request schema
 class InputData(BaseModel):
