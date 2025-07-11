@@ -14,12 +14,19 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 
+type PredictionResult = {
+  predicted_mass_deposition: number;
+  predicted_hardness: number;
+};
+
 export default function Home() {
   const [current, setCurrent] = useState(1);
   const [ph, setPh] = useState(2.5);
   const [temperature, setTemperature] = useState(30);
   const [bathCon, setBathCon] = useState(10);
   const [speed, setSpeed] = useState(200);
+  const [res, setRes] = useState<PredictionResult | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handlePrdict = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,25 +40,33 @@ export default function Home() {
       alert("Please fill all the fields to make a prediction.");
       return;
     }
+    setLoading(true);
 
     // Here you would typically call an API to get the prediction
     // For demonstration, we will just log the values
-    
-    const data = {
-      Current: current,
-      pH: ph,
-      Temp: temperature,
-      Bath_conc: bathCon,
-      Speed: speed,
-    };
-    console.log("Prediction data:", data);
+    try {
+      const data = {
+        Current: current,
+        pH: ph,
+        Temp: temperature,
+        Bath_conc: bathCon,
+        Speed: speed,
+      };
 
-    const response= await axios.post(
-      `${process.env.API_URL}/predict`,data
-    );
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/predict`,
+        data,
+      );
+      // console.log(response.data);
 
-    console.log("Prediction response:", response.data);
-    
+      setRes(response.data);
+    } catch (error) {
+      console.error("Error making prediction:", error);
+      alert("An error occurred while making the prediction. Please try again.");
+      return;
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,9 +98,9 @@ export default function Home() {
                     <SelectValue placeholder="1" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="light">1</SelectItem>
-                    <SelectItem value="dark">2</SelectItem>
-                    <SelectItem value="system">3</SelectItem>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -166,14 +181,20 @@ export default function Home() {
         </form>
         <div className="w-full bg-white dark:bg-gray-600 flex flex-col p-4 rounded-lg shadow-md mt-4">
           <span>Results:</span>
-          <div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-right">Mass deposited:</div>
-              <div className="text-left">{current} mg</div>
-              <div className="text-right">Hardness:</div>
-              <div className="text-left">{ph} HV</div>
+          {loading ? (
+            <div className="text-center">Loading...</div>
+          ) : res != null ? (
+            <div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-right">Mass deposited:</div>
+                <div className="text-left">
+                  {res.predicted_mass_deposition.toFixed(2)} mg
+                </div>
+                <div className="text-right">Hardness:</div>
+                <div className="text-left">{res.predicted_hardness.toFixed(2)} HV</div>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </div>
