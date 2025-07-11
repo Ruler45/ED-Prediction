@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/ui/modeToggle";
 import { Label } from "@radix-ui/react-label";
 import { useState } from "react";

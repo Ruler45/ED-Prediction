@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js 15 | Sahin Alam",
+  title: "Electrodeposition Predictor | Sahin Alam",
   description: "Created by Sahin Alam",
 };
 
