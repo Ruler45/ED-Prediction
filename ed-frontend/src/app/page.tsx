@@ -16,6 +16,8 @@ import axios from "axios";
 type PredictionResult = {
   predicted_mass_deposition: number;
   predicted_hardness: number;
+  predicted_sn_ratio: number;
+  predicted_volume_fraction: number;
 };
 
 export default function Home() {
@@ -189,8 +191,21 @@ export default function Home() {
                 <div className="text-left">
                   {res.predicted_mass_deposition.toFixed(2)} mg
                 </div>
+
                 <div className="text-right">Hardness:</div>
-                <div className="text-left">{res.predicted_hardness.toFixed(2)} HV</div>
+                <div className="text-left">
+                  {res.predicted_hardness.toFixed(2)} HV
+                </div>
+
+                <div className="text-right">S/N Ratio:</div>
+                <div className="text-left">
+                  {res.predicted_sn_ratio.toFixed(2)}
+                </div>
+
+                <div className="text-right">Volume Fraction:</div>
+                <div className="text-left">
+                  {res.predicted_volume_fraction.toFixed(2)} %
+                </div>
               </div>
             </div>
           ) : null}
