@@ -30,16 +30,14 @@ class InputData(BaseModel):
 def predictHardness(data: InputData):
 
     # Load the model
-    with open("models/HardnessModel1.pkl", "rb") as f:
-        model1 = pickle.load(f)
-    with open("models/HardnessModel2.pkl", "rb") as f:
-        model2 = pickle.load(f)
-    with open("models/HardnessModel3.pkl", "rb") as f:
-        model3 = pickle.load(f)
-    with open("models/HardnessModel4.pkl", "rb") as f:
-        model4 = pickle.load(f)
-    with open("models/Scaler.pkl", "rb") as f:
-        scaler = pickle.load(f)
+    with open("models/hardness_bundle.pkl", "rb") as f:
+        bundle = pickle.load(f)
+
+    scaler = bundle["scaler"]
+    model1 = bundle["model1"]
+    model2 = bundle["model2"]
+    model3 = bundle["model3"]
+    model4 = bundle["model4"]
 
 
     input_array = np.array([
